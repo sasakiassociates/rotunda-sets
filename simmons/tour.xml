@@ -1,0 +1,2680 @@
+﻿<krpano version="1.20.10" title="Simmons" onstart="combo_setup();">
+
+
+	<include url="skin/vtourskin.xml" />
+	<include url="%VIEWER%/plugins/combobox.xml" />
+
+	<skin_settings
+		maps="false"
+		maps_type="google"
+		maps_bing_api_key=""
+		maps_google_api_key=""
+		maps_zoombuttons="false"
+		maps_loadonfirstuse="true"
+		gyro="true"
+		gyro_keeplookingdirection="false"
+		webvr="true"
+		webvr_keeplookingdirection="true"
+		webvr_prev_next_hotspots="true"
+		autotour="false"
+		littleplanetintro="false"
+		followmousecontrol="false"
+		title="true"
+		thumbs="true"
+		thumbs_width="120"
+		thumbs_height="80"
+		thumbs_padding="10"
+		thumbs_crop="0|40|240|160"
+		thumbs_opened="false"
+		thumbs_text="false"
+		thumbs_dragging="true"
+		thumbs_onhoverscrolling="false"
+		thumbs_scrollbuttons="false"
+		thumbs_scrollindicator="false"
+		thumbs_loop="false"
+		tooltips_buttons="false"
+		tooltips_thumbs="false"
+		tooltips_hotspots="true"
+		tooltips_mapspots="false"
+		deeplinking="false"
+		loadscene_flags="MERGE"
+		loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+		loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+		loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+		loadingtext="loading pano..."
+		layout_width="100%"
+		layout_maxwidth="814"
+		controlbar_width="-24"
+		controlbar_height="40"
+		controlbar_offset="20"
+		controlbar_offset_closed="-40"
+		controlbar_overlap.no-fractionalscaling="10"
+		controlbar_overlap.fractionalscaling="0"
+		design_skin_images="vtourskin.png"
+		design_bgcolor="0x383838"
+		design_bgalpha="0.8"
+		design_bgborder="0"
+		design_bgroundedge="5"
+		design_thumbborder_bgborder="3 0xFFFF 1.0"
+		design_thumbborder_padding="2"
+		design_thumbborder_bgroundedge="0"
+		design_text_css="color:#0xFFFF; font-family:Arial;"
+		design_text_shadow="" />
+
+
+	<combobox
+		name="options_spot"
+		design="combobox_simple"
+		align="righttop"
+		x="110"
+		y="10">
+		<item name="item1" caption="1" onclick="change_spot(1);" />
+		<item name="item2" caption="2" onclick="change_spot(2);" />
+		<item name="item3" caption="3" onclick="change_spot(3);" />
+		<item name="item4" caption="4" onclick="change_spot(4);" />
+		<item name="item5" caption="5" onclick="change_spot(5);" />
+		<item name="item6" caption="6" onclick="change_spot(6);" />
+		<item name="item7a" caption="7a" onclick="change_spot(7a);" />
+		<item name="item7b" caption="7b" onclick="change_spot(7b);" />
+	</combobox>
+
+	<combobox
+		name="options_designs"
+		design="combobox_simple"
+		align="righttop"
+		x="10"
+		y="10"
+		keep="true">
+		<item name="item1" caption="150" onclick="change_opt(150);" />
+		<item name="item2" caption="199" onclick="change_opt(199);" />
+		<item name="item3" caption="300" onclick="change_opt(300);" />
+		<item name="item4" caption="PDA-342" onclick="change_opt(PDA-342);" />
+		<item name="item5" caption="Proposal1" onclick="change_opt(Proposal1);" />
+		<item name="item6" caption="Proposal2" onclick="change_opt(Proposal2);" />
+	</combobox>
+
+	<combobox_design name="combobox_simple" margin="2" open_close_speed="0.25">
+		<style name="combobox_container_style"
+			   bgalpha="1.0"
+			   bgcolor="0x383838"
+			   bgroundedge="1"
+			   bgshadow="0 1 3 0x000000 1.0"
+			   />
+		<style name="combobox_marker_style"
+			   css="color:#FFFFFF;"
+			   bg="false"
+			   txtshadow="0 0 2 0xFFFFFF 1"
+			   />
+		<style name="combobox_item_style"
+			   css="color:0xFFFFFF;"
+			   padding="4 4"
+			   bg="false"
+			   bgcolor="0x969696"
+			   bgalpha="1.0"
+			   bgroundedge="1"
+			   txtshadow="0 0 1 0xFFFFFF 1.0"
+			   />
+	</combobox_design>
+
+	<action name="combo_setup">
+		set(OPT_SPOT, 1 );
+		set(OPT_DESIGN,  150);
+	</action>
+
+	<action name="change_spot_hot">
+		trace(%1);
+		layer[options_spot].selectItem(%1);
+		change_spot(%1);
+	</action>
+
+	<action name="change_spot">
+		set(OPT_SPOT, %1 );
+		set_view();
+		loadscene(get(OPT), null, MERGE, BLEND(.5));
+	</action>
+
+	<action name="change_opt">
+		set(OPT_DESIGN, %1 );
+		set_view();
+		loadscene(get(OPT), null, KEEPVIEW|KEEPMOVING, BLEND(.5));
+	</action>
+
+
+	<!-- OPT_DESIGN="150" OPT_SPOT="4" -->
+	<!-- path=OPT_DESIGN, "-", OPT_SPOT -->
+	<action name="set_view">
+		txtadd(OPT,"scene_", get(OPT_DESIGN), "-", get(OPT_SPOT));
+		trace(OPT);
+	</action>
+
+	<!-- skin_comboHotSpot - style for the hotspots -->
+	<style name="skin_comboHotSpot"
+		url="./skin/vtourskin_hotspot.png"
+		edge="top"
+		distorted="true"
+		linkedSpot=""
+		depth="1000"
+		scale="0.5"
+		item="0"
+		tooltip=""
+		onover.addevent="tween(scale,0.55);"
+		onout.addevent="tween(scale,0.5);"
+		onloaded.addevent="skin_comboHotSpot_setup();"
+		onclick.addevent="change_spot_hot(get(item));"
+	 />
+
+	<action name="skin_hotspotstyle_setup" scope="local">
+		if(isvalue(caller.item) AND skin_settings.tooltips_hotspots,
+			copy(caller.tooltip, get(caller.item).title);
+			caller.loadstyle(skin_tooltips);
+		);
+	</action>
+
+	<action name="skin_comboHotSpot_setup">
+		if(isvalue(caller.item) AND skin_settings.tooltips_hotspots,
+				trace("on load event");
+				copy(caller.tooltip, get(caller.item).title);
+				caller.loadstyle(skin_tooltips);
+		);
+	</action>
+
+	<scene name="scene_Home" title="Home" onstart="" thumburl="panos/Home.tiles/thumb.jpg" lat="" lng="" heading="">
+
+		<control bouncinglimits="true" />
+
+		<view
+			hlookat="93.069"
+			vlookat="45.291"
+			fovtype="MFOV"
+			fov="120.0"
+			maxpixelzoom="2.0"
+			fovmin="41.000296"
+			fovmax="140.0"
+			limitview="range"
+			hlookatmin="21.40016"
+			hlookatmax="163.752428"
+			vlookatmin="-12.562464"
+			vlookatmax="90.0" />
+
+		<preview url="panos/Home.tiles/preview.jpg" />
+
+		<image prealign="null">
+			<cube
+				url="panos/Home.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="89.835"
+			atv="60.252"
+			item="1"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="35.748"
+			atv="25.395"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="93.501"
+			atv="43.409"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="88.383"
+			atv="32.154"
+			item="7a"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="84.432"
+			atv="34.038"
+			item="7b"
+		 />
+		<hotspot
+			name="spot6"
+			style="skin_comboHotSpot"
+			ath="95.681"
+			atv="25.399"
+			item="3"
+		 />
+		<hotspot
+			name="spot7"
+			style="skin_comboHotSpot"
+			ath="91.035"
+			atv="20.753"
+			item="4"
+		 />
+		<hotspot
+			name="spot8"
+			style="skin_comboHotSpot"
+			ath="94.539"
+			atv="17.232"
+			item="5"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-1"
+		title="150"
+		onstart=""
+		thumburl="panos/150-1.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="-264.681"
+			vlookat="0.251"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-1.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-1.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-24.908"
+			atv="-3.378"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="67.295"
+			atv="-0.392"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-2"
+		title="150"
+		onstart=""
+		thumburl="panos/150-2.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="220.767"
+			vlookat="3.827"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-2.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-2.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-20.896"
+			atv="-89.895"
+			item="7a"
+		 />
+
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="66.573"
+			atv="-0.582"
+			item="4"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="76.899"
+			atv="-1.425"
+			item="3"
+		 />
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-121.213"
+			atv="-1.556"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-3"
+		title="150-3"
+		onstart=""
+		thumburl="panos/150-3.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="49.529"
+			vlookat="2.180"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-3.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-3.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-88.182"
+			atv="0.462"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-64.244"
+			atv="-2.349"
+			item="5"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="100.397"
+			atv="-2.396"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="147.959"
+			atv="0.981"
+			item="6"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="102.374"
+			atv="-19.734"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-4"
+		title="150-4"
+		onstart=""
+		thumburl="panos/150-4.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="79.697"
+			vlookat="2.124"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-4.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-4.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-37.286"
+			atv="-0.977"
+			item="5"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="91.272"
+			atv="0.601"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="112.062"
+			atv="-21.055"
+			item="7a"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="110.253"
+			atv="-3.268"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-5"
+		title="150-5"
+		onstart=""
+		thumburl="panos/150-5.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="77.323"
+			vlookat="5.747"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-5.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-5.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="91.851"
+			atv="-2.194"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="82.971"
+			atv="-3.754"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="88.518"
+			atv="-14.923"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-6"
+		title="150-6"
+		onstart=""
+		thumburl="panos/150-6.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="120.119"
+			vlookat="2.811"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-6.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-6.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="53.881"
+			atv="-3.161"
+			item="3"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="129.104"
+			atv="-3.498"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-7a"
+		title="150-7a"
+		onstart=""
+		thumburl="panos/150-7a.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="73.959"
+			vlookat="12.411"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-7a.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-7a.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_150-7b"
+		title="150-7b"
+		onstart=""
+		thumburl="panos/150-7b.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="94.901"
+			vlookat="13.441"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/150-7b.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/150-7b.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="87.732"
+			atv="50.043"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_199-1"
+		title="199-1"
+		onstart=""
+		thumburl="panos/199-1.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="-264.681"
+			vlookat="0.251"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-1.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-1.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-24.908"
+			atv="-3.378"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="67.295"
+			atv="-0.392"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_199-2"
+		title="199-2"
+		onstart=""
+		thumburl="panos/199-2.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="220.767"
+			vlookat="3.827"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-2.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-2.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-20.896"
+			atv="-89.895"
+			item="7a"
+		 />
+
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="66.573"
+			atv="-0.582"
+			item="4"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="76.899"
+			atv="-1.425"
+			item="3"
+		 />
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-121.213"
+			atv="-1.556"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_199-3"
+		title="199-3"
+		onstart=""
+		thumburl="panos/199-3.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="49.529"
+			vlookat="2.180"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-3.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-3.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-88.182"
+			atv="0.462"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-64.244"
+			atv="-2.349"
+			item="5"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="100.397"
+			atv="-2.396"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="147.959"
+			atv="0.981"
+			item="6"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="102.374"
+			atv="-19.734"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_199-4"
+		title="199-4"
+		onstart=""
+		thumburl="panos/199-4.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="79.697"
+			vlookat="2.124"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-4.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-4.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-37.286"
+			atv="-0.977"
+			item="5"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="91.272"
+			atv="0.601"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="112.062"
+			atv="-21.055"
+			item="7a"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="110.253"
+			atv="-3.268"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_199-5"
+		title="199-5"
+		onstart=""
+		thumburl="panos/199-5.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="0.0"
+			vlookat="0.0"
+			fovtype="MFOV"
+			fov="120"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-5.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-5.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="91.851"
+			atv="-2.194"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="82.971"
+			atv="-3.754"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="88.518"
+			atv="-14.923"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_199-6"
+		title="199-6"
+		onstart=""
+		thumburl="panos/199-6.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="120.119"
+			vlookat="2.811"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-6.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-6.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="53.881"
+			atv="-3.161"
+			item="3"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="129.104"
+			atv="-3.498"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_199-7a"
+		title="199-7a"
+		onstart=""
+		thumburl="panos/199-7a.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="73.959"
+			vlookat="12.411"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-7a.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-7a.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_199-7b"
+		title="199-7b"
+		onstart=""
+		thumburl="panos/199-7b.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="94.901"
+			vlookat="13.441"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/199-7b.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/199-7b.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_300-1"
+		title="300-1"
+		onstart=""
+		thumburl="panos/300-1.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="-264.681"
+			vlookat="0.251"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-1.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-1.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-24.908"
+			atv="-3.378"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="67.295"
+			atv="-0.392"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_300-2"
+		title="300-2"
+		onstart=""
+		thumburl="panos/300-2.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="220.767"
+			vlookat="3.827"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-2.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-2.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+		name="spot2"
+		style="skin_comboHotSpot"
+		ath="-20.896"
+		atv="-89.895"
+		item="7a"
+	 />
+
+	<hotspot
+		name="spot3"
+		style="skin_comboHotSpot"
+		ath="66.573"
+		atv="-0.582"
+		item="4"
+	 />
+	<hotspot
+		name="spot4"
+		style="skin_comboHotSpot"
+		ath="76.899"
+		atv="-1.425"
+		item="3"
+	 />
+	<hotspot
+		name="spot1"
+		style="skin_comboHotSpot"
+		ath="-121.213"
+		atv="-1.556"
+		item="1"
+	 />
+
+
+	</scene>
+
+	<scene
+		name="scene_300-3"
+		title="300-3"
+		onstart=""
+		thumburl="panos/300-3.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="49.529"
+			vlookat="2.180"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-3.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-3.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-88.182"
+			atv="0.462"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-64.244"
+			atv="-2.349"
+			item="5"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="100.397"
+			atv="-2.396"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="147.959"
+			atv="0.981"
+			item="6"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="102.374"
+			atv="-19.734"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_300-4"
+		title="300-4"
+		onstart=""
+		thumburl="panos/300-4.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="79.697"
+			vlookat="2.124"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-4.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-4.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-37.286"
+			atv="-0.977"
+			item="5"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="91.272"
+			atv="0.601"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="112.062"
+			atv="-21.055"
+			item="7a"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="110.253"
+			atv="-3.268"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_300-5"
+		title="300-5"
+		onstart=""
+		thumburl="panos/300-5.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="77.323"
+			vlookat="5.747"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-5.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-5.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="91.851"
+			atv="-2.194"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="82.971"
+			atv="-3.754"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="88.518"
+			atv="-14.923"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_300-6"
+		title="300-6"
+		onstart=""
+		thumburl="panos/300-6.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="120.119"
+			vlookat="2.811"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-6.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-6.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="53.881"
+			atv="-3.161"
+			item="3"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="129.104"
+			atv="-3.498"
+			item="1"
+		 />
+	</scene>
+
+	<scene
+		name="scene_300-7a"
+		title="300-7a"
+		onstart=""
+		thumburl="panos/300-7a.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="73.959"
+			vlookat="12.411"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-7a.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-7a.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_300-7b"
+		title="300-7b"
+		onstart=""
+		thumburl="panos/300-7b.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="94.901"
+			vlookat="13.441"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/300-7b.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/300-7b.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+
+	<scene
+		name="scene_PDA-342-1"
+		title="PDA-342-1"
+		onstart=""
+		thumburl="panos/PDA-342-1.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="-264.681"
+			vlookat="0.251"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-1.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-1.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-24.908"
+			atv="-3.378"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="67.295"
+			atv="-0.392"
+			item="2"
+		 />
+
+
+	</scene>
+
+	<scene
+		name="scene_PDA-342-2"
+		title="PDA-342-2"
+		onstart=""
+		thumburl="panos/PDA-342-2.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="220.767"
+			vlookat="3.827"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-2.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-2.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-20.896"
+			atv="-89.895"
+			item="7a"
+		 />
+
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="66.573"
+			atv="-0.582"
+			item="4"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="76.899"
+			atv="-1.425"
+			item="3"
+		 />
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-121.213"
+			atv="-1.556"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_PDA-342-3"
+		title="PDA-342-3"
+		onstart=""
+		thumburl="panos/PDA-342-3.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="49.529"
+			vlookat="2.180"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-3.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-3.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-88.182"
+			atv="0.462"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-64.244"
+			atv="-2.349"
+			item="5"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="100.397"
+			atv="-2.396"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="147.959"
+			atv="0.981"
+			item="6"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="102.374"
+			atv="-19.734"
+			item="7a"
+		 />
+
+
+	</scene>
+
+	<scene
+		name="scene_PDA-342-4"
+		title="PDA-342-4"
+		onstart=""
+		thumburl="panos/PDA-342-4.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="79.697"
+			vlookat="2.124"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-4.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-4.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-37.286"
+			atv="-0.977"
+			item="5"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="91.272"
+			atv="0.601"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="112.062"
+			atv="-21.055"
+			item="7a"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="110.253"
+			atv="-3.268"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_PDA-342-5"
+		title="PDA-342-5"
+		onstart=""
+		thumburl="panos/PDA-342-5.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="77.323"
+			vlookat="5.747"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-5.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-5.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="91.851"
+			atv="-2.194"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="82.971"
+			atv="-3.754"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="88.518"
+			atv="-14.923"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_PDA-342-6"
+		title="PDA-342-6"
+		onstart=""
+		thumburl="panos/PDA-342-6.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="120.119"
+			vlookat="2.811"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-6.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-6.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="53.881"
+			atv="-3.161"
+			item="3"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="129.104"
+			atv="-3.498"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_PDA-342-7a"
+		title="PDA-342-7a"
+		onstart=""
+		thumburl="panos/PDA-342-7a.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="73.959"
+			vlookat="12.411"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-7a.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-7a.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+
+		</image>
+
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_PDA-342-7b"
+		title="PDA-342-7b"
+		onstart=""
+		thumburl="panos/PDA-342-7b.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="94.901"
+			vlookat="13.441"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/PDA-342-7b.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/PDA-342-7b.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal1-1"
+		title="Proposal1-1"
+		onstart=""
+		thumburl="panos/Proposal1-1.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="-264.681"
+			vlookat="0.251"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-1.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-1.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-24.908"
+			atv="-3.378"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="67.295"
+			atv="-0.392"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal1-2"
+		title="Proposal1-2"
+		onstart=""
+		thumburl="panos/Proposal1-2.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="220.767"
+			vlookat="3.827"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-2.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-2.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-20.896"
+			atv="-89.895"
+			item="7a"
+		 />
+
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="66.573"
+			atv="-0.582"
+			item="4"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="76.899"
+			atv="-1.425"
+			item="3"
+		 />
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-121.213"
+			atv="-1.556"
+			item="1"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal1-3"
+		title="Proposal1-3"
+		onstart=""
+		thumburl="panos/Proposal1-3.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="49.529"
+			vlookat="2.180"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-3.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-3.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-88.182"
+			atv="0.462"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-64.244"
+			atv="-2.349"
+			item="5"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="100.397"
+			atv="-2.396"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="147.959"
+			atv="0.981"
+			item="6"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="102.374"
+			atv="-19.734"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal1-4"
+		title="Proposal1-4"
+		onstart=""
+		thumburl="panos/Proposal1-4.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="79.697"
+			vlookat="2.124"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-4.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-4.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-37.286"
+			atv="-0.977"
+			item="5"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="91.272"
+			atv="0.601"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="112.062"
+			atv="-21.055"
+			item="7a"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="110.253"
+			atv="-3.268"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal1-5"
+		title="Proposal1-5"
+		onstart=""
+		thumburl="panos/Proposal1-5.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="77.323"
+			vlookat="5.747"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-5.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-5.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="91.851"
+			atv="-2.194"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="82.971"
+			atv="-3.754"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="88.518"
+			atv="-14.923"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal1-6"
+		title="Proposal1-6"
+		onstart=""
+		thumburl="panos/Proposal1-6.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="120.119"
+			vlookat="2.811"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-6.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-6.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="53.881"
+			atv="-3.161"
+			item="3"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="129.104"
+			atv="-3.498"
+			item="1"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal1-7a"
+		title="Proposal1-7a"
+		onstart=""
+		thumburl="panos/Proposal1-7a.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="73.959"
+			vlookat="12.411"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-7a.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-7a.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal1-7b"
+		title="Proposal1-7b"
+		onstart=""
+		thumburl="panos/Proposal1-7b.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="94.901"
+			vlookat="13.441"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal1-7b.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal1-7b.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal2-1"
+		title="Proposal2-1"
+		onstart=""
+		thumburl="panos/Proposal2-1.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="-264.681"
+			vlookat="0.251"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-1.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-1.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-24.908"
+			atv="-3.378"
+			item="6"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="67.295"
+			atv="-0.392"
+			item="2"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal2-2"
+		title="Proposal2-2"
+		onstart=""
+		thumburl="panos/Proposal2-2.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="220.767"
+			vlookat="3.827"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-2.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-2.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-20.896"
+			atv="-89.895"
+			item="7a"
+		 />
+
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="66.573"
+			atv="-0.582"
+			item="4"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="76.899"
+			atv="-1.425"
+			item="3"
+		 />
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-121.213"
+			atv="-1.556"
+			item="1"
+		 />
+
+
+	</scene>
+
+	<scene
+		name="scene_Proposal2-3"
+		title="Proposal2-3"
+		onstart=""
+		thumburl="panos/Proposal2-3.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="49.529"
+			vlookat="2.180"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-3.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-3.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-88.182"
+			atv="0.462"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="-64.244"
+			atv="-2.349"
+			item="5"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="100.397"
+			atv="-2.396"
+			item="2"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="147.959"
+			atv="0.981"
+			item="6"
+		 />
+		<hotspot
+			name="spot5"
+			style="skin_comboHotSpot"
+			ath="102.374"
+			atv="-19.734"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal2-4"
+		title="Proposal2-4"
+		onstart=""
+		thumburl="panos/Proposal2-4.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="79.697"
+			vlookat="2.124"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-4.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-4.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="-37.286"
+			atv="-0.977"
+			item="5"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="91.272"
+			atv="0.601"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="112.062"
+			atv="-21.055"
+			item="7a"
+		 />
+		<hotspot
+			name="spot4"
+			style="skin_comboHotSpot"
+			ath="110.253"
+			atv="-3.268"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal2-5"
+		title="Proposal2-5"
+		onstart=""
+		thumburl="panos/Proposal2-5.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="77.323"
+			vlookat="5.747"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-5.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-5.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="91.851"
+			atv="-2.194"
+			item="4"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="82.971"
+			atv="-3.754"
+			item="3"
+		 />
+		<hotspot
+			name="spot3"
+			style="skin_comboHotSpot"
+			ath="88.518"
+			atv="-14.923"
+			item="7a"
+		 />
+
+	</scene>
+
+	<scene
+		name="scene_Proposal2-6"
+		title="Proposal2-6"
+		onstart=""
+		thumburl="panos/Proposal2-6.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="120.119"
+			vlookat="2.811"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-6.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-6.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="53.881"
+			atv="-3.161"
+			item="3"
+		 />
+		<hotspot
+			name="spot2"
+			style="skin_comboHotSpot"
+			ath="129.104"
+			atv="-3.498"
+			item="1"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal2-7a"
+		title="Proposal2-7a"
+		onstart=""
+		thumburl="panos/Proposal2-7a.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="73.959"
+			vlookat="12.411"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-7a.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-7a.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+	<scene
+		name="scene_Proposal2-7b"
+		title="Proposal2-7b"
+		onstart=""
+		thumburl="panos/Proposal2-7b.tiles/thumb.jpg"
+		lat=""
+		lng=""
+		heading="">
+
+		<control bouncinglimits="calc:image.cube ? true : false" />
+
+		<view
+			hlookat="94.901"
+			vlookat="13.441"
+			fovtype="MFOV"
+			fov="120.000"
+			maxpixelzoom="2.0"
+			fovmin="70"
+			fovmax="140"
+			limitview="auto" />
+
+		<preview url="panos/Proposal2-7b.tiles/preview.jpg" />
+
+		<image>
+			<cube
+				url="panos/Proposal2-7b.tiles/%s/l%l/%v/l%l_%s_%v_%h.jpg"
+				multires="512,640,1280,2624" />
+		</image>
+		<hotspot
+			name="spot1"
+			style="skin_comboHotSpot"
+			ath="82.507"
+			atv="51.069"
+			item="2"
+		 />
+	</scene>
+
+
+</krpano>
